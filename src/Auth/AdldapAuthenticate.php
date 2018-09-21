@@ -129,7 +129,10 @@ class AdldapAuthenticate extends FormAuthenticate
                 }
 
                 $attributes = $this->_cleanAttributes($attributes);
-                $attributes['groups'] = $this->_cleanGroups($attributes['memberof']);
+
+                $attributes['memberof'] = [];
+                if (isset($attributes['memberof']))
+                    $attributes['groups'] = $this->_cleanGroups($attributes['memberof']);
 
                 return $attributes;
             }
