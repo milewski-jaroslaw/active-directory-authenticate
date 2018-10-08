@@ -108,6 +108,18 @@ class AdldapAuthenticate extends FormAuthenticate
      */
     public function findAdUser($username, $password)
     {
+        $accountSuffix = $this->_config['config']['account_suffix'];
+        $accountSuffixArray = explode(';',$accountSuffix);
+        $userAccountNameArray = explode('@',$username);
+        if (isset($userAccountNameArray[1])) {
+            $searchSuffix = '@'.$userAccountNameArray[1];
+            if (!in_array($searchSuffix,$accountSuffixArray)) {
+                return false;
+            }
+        }
+
+        $username = $userAccountNameArray[0];
+
         try {
             $this->ad->connect('default');
             if ($this->provider->auth()->attempt($username, $password, true)) {
